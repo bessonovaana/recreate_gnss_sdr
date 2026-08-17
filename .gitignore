@@ -1,0 +1,4 @@
+fir_filter_check.py
+signal_filtered.dat
+signal_source.dat
+.gitignore
