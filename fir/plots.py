@@ -12,18 +12,6 @@ def plot_initial_extrema(ctx):
     plt.legend()
     plt.grid()
 
-def plot_error(ctx, iteration=None):
-    plt.figure()
-    plt.plot(ctx.grid, ctx.E, label="Weight error")
-    plt.scatter([ctx.grid[i] for i in ctx.ext], [ctx.E[i] for i in ctx.ext])
-    plt.xlabel("Normalized frequency")
-    plt.ylabel("Weighted error E(f)")
-    if iteration is not None:
-        plt.title(f"Remez error — iteration {iteration}")
-    else:
-        plt.title("Remez weighted error")
-    plt.legend()
-    plt.grid()
 
 
 def plot_time_signal(signal,filtered,num_samples=65536):
@@ -81,15 +69,3 @@ def plot_remez_comparison(h_my,h_ref):
     plt.legend()
     plt.grid()
 
-def plot_response_error(h_my,h_ref):
-    w,H_my = freqz(h_my,worN=4096)
-    _,H_ref = freqz(h_ref,worN=4096)
-    f = w / np.pi
-    error = np.abs(H_my) - np.abs(H_ref)
-    plt.figure()
-    plt.plot(f,error)
-    plt.axhline(0,linewidth=0.8)
-    plt.xlabel("Normalized frequency")
-    plt.ylabel("H_our - H_reference")
-    plt.title("Frequency response difference")
-    plt.grid()

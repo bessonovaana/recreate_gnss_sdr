@@ -6,19 +6,17 @@ from remez import remez
 from fir import apply_fir
 from plots import (
     plot_initial_extrema,
-    plot_error,
-    plot_response_error,
     plot_time_signal,
     plot_spectrum,plot_remez_comparison
 )
 
-FS = 4000000
-NUM_TAPS = 5
+FS = 62314000
+NUM_TAPS = 11
 
 BANDS = [
     0.0,
-    0.45,
-    0.55,
+    0.97,
+    0.98,
     1.0
 ]
 
@@ -51,7 +49,6 @@ print("\nOur coefficients:")
 print(h_my)
 
 plot_initial_extrema(ctx)
-plot_error(ctx)
 
 print("\nDesigning reference filter using scipy.signal.remez...")
 
@@ -71,8 +68,6 @@ print("Maximum coefficient error:",max_coefficient_error)
 
 
 plot_remez_comparison(h_my,h_ref)
-plot_response_error(h_my,h_ref)
-
 
 
 symmetry_error = np.max(np.abs(h_my - h_my[::-1]))
@@ -80,8 +75,26 @@ symmetry_error = np.max(np.abs(h_my - h_my[::-1]))
 print("\nFILTER SYMMETRY")
 print("Maximum symmetry error:",symmetry_error)
 
-signal = np.fromfile("signal_source.dat",dtype=np.complex64)
+# signal = np.fromfile("Glonass_L1_CA_SIM_Fs_62Msps_4ms.dat",dtype=np.complex64)
 
+IF_HZ = 9540000
+
+signal = np.fromfile(
+    "Glonass_L1_CA_SIM_Fs_62Msps_4ms.dat",
+    dtype=np.complex64
+)
+
+n = np.arange(len(signal), dtype=np.float64)
+
+# Перенос частоты IF в окрестность нуля
+mixer = np.exp(-1j * 2.0 * np.pi * IF_HZ * n / FS)
+
+baseband = signal * mixer
+
+# Фильтрация уже перенесённого сигнала
+filtered = apply_fir(baseband, h_my)
+
+filtered.astype(np.complex64).tofile("signal_filtered.dat")
 
 print("\nSIGNAL")
 print("Number of samples:",len(signal))

@@ -4,9 +4,6 @@ import matplotlib.pyplot as plt
 class RemezContext:
 
     def __init__(self,num_taps):
-        if num_taps % 2 == 0:
-            raise ValueError("This implementation requires odd num_taps")
-
         self.numTaps = num_taps
         self.r = (num_taps - 1) // 2
 
@@ -39,9 +36,7 @@ def create_dense_grid(bands,desired,weight,gridDensity,ctx):
 
         low = bands[2 * band]
         high = bands[2 * band + 1]
-
         d = desired[2 * band]
-
         f = low
 
         while f < high:
@@ -198,7 +193,6 @@ def select_extrema(ctx,candidates):
 
 
 def search(ctx):
-
     candidates = find_candidates(ctx)
     ctx.ext = select_extrema(ctx,candidates)
 
@@ -253,17 +247,13 @@ def coef_to_fir(a,num_taps):
 
 
 def freq_sample(ctx):
-
     a = np.array(ctx.coef)
-
     h = coef_to_fir(a,ctx.numTaps)
 
     return h,ctx
 
 
 def plot_remez_iteration(ctx,iteration):
-
-    
     plt.plot( ctx.grid,ctx.E,label="Weighted error")
     plt.scatter([ctx.grid[i] for i in ctx.ext],[ctx.E[i] for i in ctx.ext],label="Extrema")
     plt.xlabel("Normalized frequency")
@@ -274,9 +264,7 @@ def plot_remez_iteration(ctx,iteration):
 
 
 def remez(num_taps,bands,desired,weight,grid_density=16):
-
     ctx = RemezContext(num_taps)
-
     create_dense_grid(
         bands,
         desired,
@@ -300,8 +288,6 @@ def remez(num_taps,bands,desired,weight,grid_density=16):
     calc_params(ctx)
     calcError(ctx)
     
-
     h,ctx = freq_sample(ctx)
-    print("\nFinal extrema:")
 
     return h,ctx

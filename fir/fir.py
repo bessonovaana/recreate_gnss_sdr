@@ -3,7 +3,7 @@ import numpy as np
 
 def apply_fir(signal, h):
     signal = np.asarray(signal, dtype=np.complex64)
-    h = np.asarray(h, dtype=np.float32)
+    h = np.asarray(h, dtype=np.complex64)
     filtered = np.zeros_like(signal)
     for n in range(len(signal)):
         s = 0.0 + 0.0j

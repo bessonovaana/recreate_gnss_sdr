@@ -1,4 +1,6 @@
-fir_filter_check.py
+
 signal_filtered.dat
 signal_source.dat
 .gitignore
+./__pycache__
+Glonass_L1_CA_SIM_Fs_62Msps_4ms.dat
